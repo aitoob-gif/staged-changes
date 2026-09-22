@@ -482,7 +482,125 @@
                 margin-top: 15px;
             }
         }
+
+        /* Firebase Auth */
+        .auth-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .auth-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            background: var(--primary);
+            color: white;
+        }
+
+        .auth-btn.secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .auth-user {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        .auth-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.65);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .auth-box {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .auth-box h2 {
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .auth-box p {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 22px;
+        }
+
+        .auth-error {
+            display: none;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .auth-close {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.9rem;
+        }
+
+        .auth-switch button {
+            border: none;
+            background: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .auth-actions {
+                margin-top: 10px;
+            }
+
+            .auth-user {
+                display: none !important;
+            }
+        }
+
     </style>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
 </head>
 <body>
 
@@ -506,6 +624,16 @@
                 <div class="contact-header">
                     <a href="tel:+996555123456" class="phone">+996 (555) 12-34-56</a>
                     <span class="location"><i class="fa-solid fa-location-dot"></i> г. Бишкек</span>
+                    <div class="auth-actions">
+                        <div id="authUser" class="auth-user">
+                            <span id="userEmail"></span>
+                            <button class="auth-btn secondary" onclick="logout()">Выйти</button>
+                        </div>
+                        <div id="authButtons">
+                            <button class="auth-btn secondary" onclick="openAuth('login')">Войти</button>
+                            <button class="auth-btn" onclick="openAuth('register')">Регистрация</button>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -670,6 +798,38 @@
         </div>
     </section>
 
+
+    <!-- Firebase Auth Modal -->
+    <div id="authModal" class="auth-modal" onclick="closeAuthOnOverlay(event)">
+        <div class="auth-box">
+            <button class="auth-close" onclick="closeAuth()">&times;</button>
+
+            <h2 id="authTitle">Вход</h2>
+            <p id="authSubtitle">Войдите в свой аккаунт</p>
+
+            <div id="authError" class="auth-error"></div>
+
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="form-group">
+                    <label for="authEmail">Email</label>
+                    <input id="authEmail" type="email" placeholder="example@mail.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="authPassword">Пароль</label>
+                    <input id="authPassword" type="password" placeholder="Минимум 6 символов" minlength="6" required>
+                </div>
+
+                <button type="submit" class="form-submit" id="authSubmit">Войти</button>
+            </form>
+
+            <div class="auth-switch">
+                <span id="authSwitchText">Нет аккаунта?</span>
+                <button type="button" id="authSwitchBtn" onclick="toggleAuthMode()">Зарегистрироваться</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -696,6 +856,145 @@
             </div>
         </div>
     </footer>
+
+
+    <script>
+        // =========================================================
+        // FIREBASE CONFIG
+        // ЗАМЕНИТЕ значения ниже данными из вашего Firebase проекта.
+        // Firebase Console -> Project settings -> Your apps -> Web app
+        // =========================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCS5P7UPKYVM3_i72Or26GUs9PqYdOYjeo",
+            authDomain: "trans-4b843.firebaseapp.com",
+            projectId: "trans-4b843",
+            storageBucket: "trans-4b843.firebasestorage.app",
+            messagingSenderId: "1089570872441",
+            appId: "1:1089570872441:web:38efbef8c89c7d06c948a8"
+        };
+
+        // Инициализация Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        let authMode = "login";
+
+        function openAuth(mode) {
+            authMode = mode;
+            document.getElementById("authModal").classList.add("active");
+            updateAuthModal();
+            document.getElementById("authEmail").focus();
+        }
+
+        function closeAuth() {
+            document.getElementById("authModal").classList.remove("active");
+            document.getElementById("authError").style.display = "none";
+            document.getElementById("authForm").reset();
+        }
+
+        function closeAuthOnOverlay(event) {
+            if (event.target.id === "authModal") {
+                closeAuth();
+            }
+        }
+
+        function toggleAuthMode() {
+            authMode = authMode === "login" ? "register" : "login";
+            updateAuthModal();
+        }
+
+        function updateAuthModal() {
+            const title = document.getElementById("authTitle");
+            const subtitle = document.getElementById("authSubtitle");
+            const submit = document.getElementById("authSubmit");
+            const switchText = document.getElementById("authSwitchText");
+            const switchBtn = document.getElementById("authSwitchBtn");
+
+            if (authMode === "login") {
+                title.textContent = "Вход";
+                subtitle.textContent = "Войдите в свой аккаунт";
+                submit.textContent = "Войти";
+                switchText.textContent = "Нет аккаунта?";
+                switchBtn.textContent = "Зарегистрироваться";
+            } else {
+                title.textContent = "Регистрация";
+                subtitle.textContent = "Создайте аккаунт";
+                submit.textContent = "Зарегистрироваться";
+                switchText.textContent = "Уже есть аккаунт?";
+                switchBtn.textContent = "Войти";
+            }
+        }
+
+        async function handleAuth(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("authEmail").value.trim();
+            const password = document.getElementById("authPassword").value;
+            const errorBox = document.getElementById("authError");
+            const submit = document.getElementById("authSubmit");
+
+            errorBox.style.display = "none";
+            submit.disabled = true;
+            submit.textContent = "Подождите...";
+
+            try {
+                if (authMode === "register") {
+                    await auth.createUserWithEmailAndPassword(email, password);
+                    alert("Регистрация прошла успешно!");
+                } else {
+                    await auth.signInWithEmailAndPassword(email, password);
+                    alert("Вы успешно вошли!");
+                }
+
+                closeAuth();
+            } catch (error) {
+                console.error(error);
+
+                const messages = {
+                    "auth/email-already-in-use": "Этот email уже зарегистрирован.",
+                    "auth/invalid-email": "Некорректный email.",
+                    "auth/weak-password": "Пароль должен содержать минимум 6 символов.",
+                    "auth/user-not-found": "Пользователь с таким email не найден.",
+                    "auth/wrong-password": "Неверный пароль.",
+                    "auth/invalid-credential": "Неверный email или пароль.",
+                    "auth/too-many-requests": "Слишком много попыток. Попробуйте позже."
+                };
+
+                errorBox.textContent = messages[error.code] || "Произошла ошибка. Проверьте данные и настройки Firebase.";
+                errorBox.style.display = "block";
+            } finally {
+                submit.disabled = false;
+                submit.textContent = authMode === "login" ? "Войти" : "Зарегистрироваться";
+            }
+        }
+
+        async function logout() {
+            try {
+                await auth.signOut();
+                alert("Вы вышли из аккаунта.");
+            } catch (error) {
+                console.error(error);
+                alert("Не удалось выйти из аккаунта.");
+            }
+        }
+
+        // Отслеживаем состояние пользователя
+        auth.onAuthStateChanged((user) => {
+            const authButtons = document.getElementById("authButtons");
+            const authUser = document.getElementById("authUser");
+            const userEmail = document.getElementById("userEmail");
+
+            if (user) {
+                authButtons.style.display = "none";
+                authUser.style.display = "flex";
+                userEmail.textContent = user.email;
+            } else {
+                authButtons.style.display = "flex";
+                authUser.style.display = "none";
+                userEmail.textContent = "";
+            }
+        });
+    </script>
 
 </body>
 </html>
