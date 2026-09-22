@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОАО «Транс Союз Азия» | Автобусные туры и аренда автобусов из Бишкека</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-hover: #1d4ed8;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --light-gray: #f1f5f9;
+            --radius: 12px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background-color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+
+        .logo span {
+            font-size: 0.85rem;
+            display: block;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .contact-header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .phone {
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .location {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+            color: white;
+            padding: 120px 0 100px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto 35px;
+            color: #e2e8f0;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 15px 35px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid white;
+            margin-left: 15px;
+        }
+
+        .btn-outline:hover {
+            background-color: white;
+            color: var(--dark);
+        }
+
+        /* Advantages Section */
+        .advantages {
+            padding: 80px 0;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .card-adv {
+            background-color: var(--light-gray);
+            padding: 30px;
+            border-radius: var(--radius);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .card-adv:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-adv i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .card-adv h3 {
+            margin-bottom: 12px;
+            font-size: 1.25rem;
+        }
+
+        .card-adv p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Tours Section */
+        .tours {
+            padding: 80px 0;
+            background-color: var(--light);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .tour-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tour-img {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .tour-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .tour-content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .tour-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .tour-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .tour-info i {
+            color: var(--primary);
+        }
+
+        .tour-desc {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+
+        .tour-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--light-gray);
+            padding-top: 15px;
+        }
+
+        .tour-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .tour-price span {
+            font-size: 0.85rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        /* Bus Rental Section */
+        .bus-rental {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .bus-flex {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .bus-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .bus-img {
+            flex: 1;
+            min-width: 300px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .bus-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .bus-list {
+            list-style: none;
+            margin: 25px 0;
+        }
+
+        .bus-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bus-list i {
+            color: var(--accent);
+        }
+
+        /* Booking / Form Section */
+        .booking {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius);
+            color: var(--dark);
+            box-shadow: var(--shadow);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .form-container p {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .form-submit:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: #94a3b8;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .footer-col p, .footer-col a {
+            color: #94a3b8;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+            line-height: 1.8;
+        }
+
+        .footer-col a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #334155;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <i class="fa-solid fa-bus"></i>
+                    <div>
+                        Транс Союз Азия
+                        <span>ОАО «Транс Союз Азия»</span>
+                    </div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#tours">Туры</a></li>
+                    <li><a href="#about">Преимущества</a></li>
+                    <li><a href="#rent">Аренда автобусов</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                </ul>
+                <div class="contact-header">
+                    <a href="tel:+996555123456" class="phone">+996 (555) 12-34-56</a>
+                    <span class="location"><i class="fa-solid fa-location-dot"></i> г. Бишкек</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Захватывающие многодневные автобусные туры из Бишкека</h1>
+            <p>Путешествуйте по Кыргызстану и ближайшим странам на современных комфортабельных автобусах. Все включено: от безопасного маршрута до личного гида!</p>
+            <a href="#tours" class="btn">Выбрать тур</a>
+            <a href="#rent" class="btn btn-outline">Аренда автобуса</a>
+        </div>
+    </section>
+
+    <!-- Advantages -->
+    <section class="advantages" id="about">
+        <div class="container">
+            <h2 class="section-title">Почему выбирают нас</h2>
+            <p class="section-subtitle">Сервис полного цикла для идеального и безопасного путешествия</p>
+            <div class="grid-4">
+                <div class="card-adv">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h3>Безопасность и надежность</h3>
+                    <p>Лицензированные перевозки, опытные водители с многолетним стажем на горных трассах.</p>
+                </div>
+                <div class="card-adv">
+                    <i class="fa-solid fa-bus-simple"></i>
+                    <h3>Комфортный автопарк</h3>
+                    <p>Современные автобусы с мягкими откидными креслами, кондиционерами и Wi-Fi.</p>
+                </div>
+                <div class="card-adv">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <h3>Сервис «Всё включено»</h3>
+                    <p>Продуманные программы, проживание в лучших отелях, профессиональные гиды.</p>
+                </div>
+                <div class="card-adv">
+                    <i class="fa-solid fa-handshake"></i>
+                    <h3>Индивидуальный подход</h3>
+                    <p>Организация туров и аренды под ключ для частных групп, школ и корпоративов.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tours Catalogue -->
+    <section class="tours" id="tours">
+        <div class="container">
+            <h2 class="section-title">Популярные многодневные туры</h2>
+            <p class="section-subtitle">Готовые маршруты с выездом из Бишкека</p>
+            <div class="grid-3">
+                
+                <!-- Tour 1 -->
+                <div class="tour-card">
+                    <div class="tour-img" style="background-image: url('https://images.unsplash.com/photo-1569880153113-76e33fc52d5f?q=80&w=800&auto=format&fit=crop');">
+                        <span class="tour-badge">4 дня / 3 ночи</span>
+                    </div>
+                    <div class="tour-content">
+                        <h3>Жемчужины Иссык-Куля</h3>
+                        <div class="tour-info">
+                            <span><i class="fa-solid fa-calendar"></i> Чт - Вс</span>
+                            <span><i class="fa-solid fa-user-group"></i> Всё включено</span>
+                        </div>
+                        <p class="tour-desc">Полный круг вокруг озера Иссык-Куль: ущелье Григорьевское, Семеновское, каньоны Сказка, Каракол и горячие источники.</p>
+                        <div class="tour-footer">
+                            <div class="tour-price">14 500 <span>сом / чел</span></div>
+                            <a href="#contact" class="btn" style="padding: 10px 20px; font-size: 0.95rem;">Забронировать</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tour 2 -->
+                <div class="tour-card">
+                    <div class="tour-img" style="background-image: url('https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=800&auto=format&fit=crop');">
+                        <span class="tour-badge">5 дней / 4 ночи</span>
+                    </div>
+                    <div class="tour-content">
+                        <h3>Восточный Узбекистан (Ташкент - Самарканд)</h3>
+                        <div class="tour-info">
+                            <span><i class="fa-solid fa-calendar"></i> Каждую среду</span>
+                            <span><i class="fa-solid fa-earth-asia"></i> Международный</span>
+                        </div>
+                        <p class="tour-desc">Увлекательный автотур из Бишкека по древним городам Шелкового пути. Великая архитектура, восточные базары и культовая кухня.</p>
+                        <div class="tour-footer">
+                            <div class="tour-price">28 000 <span>сом / чел</span></div>
+                            <a href="#contact" class="btn" style="padding: 10px 20px; font-size: 0.95rem;">Забронировать</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tour 3 -->
+                <div class="tour-card">
+                    <div class="tour-img" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop');">
+                        <span class="tour-badge">3 дня / 2 ночи</span>
+                    </div>
+                    <div class="tour-content">
+                        <h3>Высокогорное озеро Сон-Куль</h3>
+                        <div class="tour-info">
+                            <span><i class="fa-solid fa-calendar"></i> Пт - Вс</span>
+                            <span><i class="fa-solid fa-campground"></i> Юрточный лагерь</span>
+                        </div>
+                        <p class="tour-desc">Погружение в кочевую культуру на высоте 3016 метров. Конные прогулки, традиционная кухня и невероятное звездное небо.</p>
+                        <div class="tour-footer">
+                            <div class="tour-price">12 000 <span>сом / чел</span></div>
+                            <a href="#contact" class="btn" style="padding: 10px 20px; font-size: 0.95rem;">Забронировать</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Bus Rental Section -->
+    <section class="bus-rental" id="rent">
+        <div class="container">
+            <div class="bus-flex">
+                <div class="bus-text">
+                    <h2 style="font-size: 2.2rem; margin-bottom: 20px;">Аренда туристических автобусов с водителем</h2>
+                    <p style="color: var(--gray); font-size: 1.05rem;">Предлагаем в аренду комфортабельные автобусы вместимостью от 18 до 55 мест для любых целей:</p>
+                    <ul class="bus-list">
+                        <li><i class="fa-solid fa-circle-check"></i> Корпоративные trips и трансферы</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Школьные и студенческие экскурсии</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Обслуживание делегаций и свадеб</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Международные поездки по СНГ</li>
+                    </ul>
+                    <a href="#contact" class="btn">Рассчитать стоимость аренды</a>
+                </div>
+                <div class="bus-img">
+                    <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=800&auto=format&fit=crop" alt="Автобус ОАО Транс Союз Азия">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Form Section -->
+    <section class="booking" id="contact">
+        <div class="container">
+            <div class="form-container">
+                <h2>Оставить заявку</h2>
+                <p>Получите бесплатную консультацию менеджера и подбор маршрута за 10 минут!</p>
+                <form onsubmit="alert('Спасибо за заявку! Наш менеджер свяжется с вами в ближайшее время.'); return false;">
+                    <div class="form-group">
+                        <label>Ваше имя</label>
+                        <input type="text" placeholder="Иван Иванов" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Номер телефона (WhatsApp)</label>
+                        <input type="tel" placeholder="+996 (___) __-__-__" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Интересующая услуга</label>
+                        <select>
+                            <option>Бронирование тура</option>
+                            <option>Аренда автобуса</option>
+                            <option>Консультация</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="form-submit">Получить консультацию</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>ОАО «Транс Союз Азия»</h4>
+                    <p>Пассажирские перевозки, аренда туристических автобусов и организация туров по Кыргызстану и зарубежью.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Быстрая навигация</h4>
+                    <a href="#tours">Каталог туров</a>
+                    <a href="#about">О компании</a>
+                    <a href="#rent">Аренда автобусов</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <p><i class="fa-solid fa-location-dot"></i> Кыргызстан, г. Бишкек</p>
+                    <p><i class="fa-solid fa-phone"></i> +996 (555) 12-34-56</p>
+                    <p><i class="fa-solid fa-envelope"></i> info@transsouzasia.kg</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ОАО «Транс Союз Азия». Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
